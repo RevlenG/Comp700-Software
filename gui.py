@@ -1,3 +1,4 @@
+
 import tkinter
 import tkinter.messagebox
 import customtkinter
@@ -13,16 +14,16 @@ class App(customtkinter.CTk):
 
         # configure window
         self.title("Clustering Reviews")
-        self.geometry(f"{1100}x{580}")
+        self.geometry(f"{1100}x{450}")
 
         # configure grid layout (4x4)
         self.grid_columnconfigure((0, 1, 2), weight=1)
-       
-        self.grid_rowconfigure((0, 1, 2), weight=1)
+        self.grid_rowconfigure((0, 1), weight=1)
 
         # create the main input panel
         self.main_frame = customtkinter.CTkFrame(self, corner_radius=5)
-        self.main_frame.grid(row=0, column=0, padx=(20, 20), sticky="w")
+        self.main_frame.grid_columnconfigure((0, 1), weight=1)
+        self.main_frame.grid(row=0, column=0, padx=(20, 20), pady=(20, 0), sticky="nsew")
 
         self.label_path = customtkinter.CTkLabel(self.main_frame, 
                                               text="Enter Dataset Path/Directory: ", 
@@ -69,18 +70,22 @@ class App(customtkinter.CTk):
 
         #output_frame
         self.likes_frame = customtkinter.CTkFrame(self, corner_radius=5)
+        self.likes_frame.grid_columnconfigure(0, weight=1)
+        self.likes_frame.grid_rowconfigure(1, weight=1)
         self.likes_frame.grid(row=0, column=1, padx=(20, 20), pady=(20,0), sticky="nsew")
         self.label_likes = customtkinter.CTkLabel(self.likes_frame, text="Likes:", font=customtkinter.CTkFont(size=15, weight="bold"))
         self.label_likes.grid(row=0, column=0, padx=(20, 20), pady=(5, 5), sticky="w")
         self.likes_textbox = customtkinter.CTkTextbox(self.likes_frame, width=175, height=300)
-        self.likes_textbox.grid(row=1, column=0, padx=(10, 10), pady=(0, 0), sticky="nsew")
+        self.likes_textbox.grid(row=1, column=0, padx=(10, 10), pady=(0, 10), sticky="nsew")
 
         self.dislikes_frame = customtkinter.CTkFrame(self, corner_radius=5)
+        self.dislikes_frame.grid_columnconfigure(0, weight=1)
+        self.dislikes_frame.grid_rowconfigure(1, weight=1)
         self.dislikes_frame.grid(row=0, column=2, padx=(20, 20), pady=(20,0), sticky="nsew")
         self.label_dislikes = customtkinter.CTkLabel(self.dislikes_frame, text="Dislikes:", font=customtkinter.CTkFont(size=15, weight="bold"))
         self.label_dislikes.grid(row=0, column=0, padx=(20, 20), pady=(5, 5), sticky="w")
         self.dislikes_textbox = customtkinter.CTkTextbox(self.dislikes_frame, width=175, height=300)
-        self.dislikes_textbox.grid(row=1, column=0, padx=(10, 10), pady=(0, 0), sticky="nsew")
+        self.dislikes_textbox.grid(row=1, column=0, padx=(10, 10), pady=(0, 10), sticky="nsew")
 
     def main_button_event(self):
         path = self.entry_path.get()
