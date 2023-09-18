@@ -20,15 +20,20 @@ nltk.download('wordnet')
 
 ##################################################################################################
 
-def preprocessing(file_path, tweet_col_name, sentiment_col_name, company_col_name):
+def preprocessing(file_path, tweet_col_name, sentiment_col_name, company_index, company_col_name, company_name):
     #Preprocessing
     df = pd.read_csv(file_path)
-    df = df[[sentiment_col_name, company_col_name, tweet_col_name]]
-    df = df.rename(columns={tweet_col_name: "Tweet", company_col_name:"Company", sentiment_col_name: "Sentiment"})
 
-    #Filtering only the IPhone and IPad reviews
-    df = df.loc[df["Company"].isin(["United"])]
+    if company_index == 1:
+        df = df[[sentiment_col_name, company_col_name, tweet_col_name]]
+        df = df.rename(columns={tweet_col_name: "Tweet", company_col_name:"Company", sentiment_col_name: "Sentiment"})
 
+        #Filtering only the Specified Company reviews
+        df = df.loc[df["Company"].isin([company_name])]
+    else:
+        df = df[[sentiment_col_name, tweet_col_name]]
+        df = df.rename(columns={tweet_col_name: "Tweet", sentiment_col_name: "Sentiment"})
+      
     #Removal of columns where the sentiment was neutral
     df = df[df["Sentiment"] != "neutral"]
 
@@ -144,6 +149,28 @@ def hierarchical_clustering(vector, feature_names, df):
       cluster = []
       for ind in np.argsort(vector.toarray()[i])[::-1][:10]:
           cluster.append(feature_names[ind])
+      clusters.append(cluster)
+
+  return clusters, df
+
+################################################################################################
+
+def dbscan_clustering(vector, feature_names, df):
+  model = DBSCAN(eps=0.2, min_samples=10)
+  y_pred = model.fit_predict(vector.toarray())
+
+  df['DBSCAN_Cluster_Labels'] = y_pred
+
+  num_clusters = len(set(y_pred)) - (1 if -1 in y_pred else 0)  # Calculate the number of clusters
+  print(num_clusters)
+
+  clusters = []
+  for i in range(num_clusters):
+      cluster = []
+      indices = np.where(y_pred == i)[0]
+      for ind in indices:
+        for word_index in np.argsort(vector.toarray()[ind])[::-1][:10]:
+          cluster.append(feature_names[word_index])
       clusters.append(cluster)
 
   return clusters, df
