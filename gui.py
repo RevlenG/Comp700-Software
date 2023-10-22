@@ -156,19 +156,26 @@ class App(customtkinter.CTk):
         if clust_method == 1:
             pos_clusters, pos_df = implementation.hierarchical_clustering(pos_vectors, pos_feature_names, pos_df)
             neg_clusters, neg_df = implementation.hierarchical_clustering(neg_vectors, neg_feature_names, neg_df)
+            pos_output_topics = implementation.topic_modelling(pos_clusters)
+            neg_output_topics = implementation.topic_modelling(neg_clusters)
         elif clust_method == 2:
             pos_clusters, pos_df = implementation.dbscan_clustering(pos_vectors, pos_feature_names, pos_df)
             neg_clusters, neg_df = implementation.dbscan_clustering(neg_vectors, neg_feature_names, neg_df)
+            pos_output_topics = implementation.topic_modelling(pos_clusters, 0)
+            neg_output_topics = implementation.topic_modelling(neg_clusters, 0)
         else:
             pos_clusters, pos_df = implementation.k_means_clustering(pos_vectors, pos_feature_names, pos_df)
             neg_clusters, neg_df = implementation.k_means_clustering(neg_vectors, neg_feature_names, neg_df)
-
-        pos_output_topics = implementation.topic_modelling(pos_clusters)
-        neg_output_topics = implementation.topic_modelling(neg_clusters)
+            pos_output_topics = implementation.topic_modelling(pos_clusters)
+            neg_output_topics = implementation.topic_modelling(neg_clusters)
 
         pos_string = '\n'.join(['\n'.join(inner_topics) for inner_topics in pos_output_topics])
-        neg_string = '\n'.join(['\n'.join(inner_topics) for inner_topics in neg_output_topics])
+        unique_pos_list = list(set(pos_string.split('\n')))
+        unique_pos_string = '\n'.join(unique_pos_list)
 
+        neg_string = '\n'.join(['\n'.join(inner_topics) for inner_topics in neg_output_topics])
+        unique_neg_list = list(set(neg_string.split('\n')))
+        unique_neg_string = '\n'.join(unique_neg_list)
 
         self.likes_textbox.configure(state="normal")
         self.dislikes_textbox.configure(state="normal")
@@ -176,8 +183,8 @@ class App(customtkinter.CTk):
         self.likes_textbox.delete("0.0", customtkinter.END)
         # if self.dislikes_textbox.get(0, customtkinter.END):
         self.dislikes_textbox.delete("0.0", customtkinter.END)
-        self.likes_textbox.insert("0.0",pos_string)
-        self.dislikes_textbox.insert("0.0",neg_string)
+        self.likes_textbox.insert("0.0",unique_pos_string)
+        self.dislikes_textbox.insert("0.0",unique_neg_string)
         self.likes_textbox.configure(state="disabled")
         self.dislikes_textbox.configure(state="disabled")
         self.progressbar.stop()

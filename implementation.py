@@ -13,12 +13,13 @@ from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans, AgglomerativeClustering, DBSCAN
 from sklearn.decomposition import PCA
+from sklearn.metrics import davies_bouldin_score, calinski_harabasz_score, silhouette_score
 from scipy.cluster.hierarchy import ward, linkage, fcluster
 
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-##################################################################################################
+###########################################################################################################
 
 def preprocessing(file_path, tweet_col_name, sentiment_col_name, company_index, company_col_name, company_name):
     #Preprocessing
@@ -78,7 +79,7 @@ def preprocessing(file_path, tweet_col_name, sentiment_col_name, company_index, 
 
     return df, pos_df, neg_df
 
-#######################################################################################################
+###########################################################################################################
 
 def vectorization(pos_df, neg_df):
     vectorizer = TfidfVectorizer(lowercase=True, ngram_range=(1,3),
@@ -108,6 +109,13 @@ def k_means_clustering(vector, feature_names, df):
 
   model = KMeans(n_clusters=num_clusters, n_init = "auto", random_state=42)
   y_pred = model.fit_predict(vector)
+  kmeans_sil = silhouette_score(vector, y_pred, metric='euclidean')
+  kmeans_dbi = davies_bouldin_score(vector.toarray(), y_pred)
+  kmeans_ch = calinski_harabasz_score(vector.toarray(), y_pred)
+  print(f'K-Means Silhouette Score: {kmeans_sil:.4f}')
+  print(f'K-Means Davies-Bouldin Index: {kmeans_dbi:.4f}')
+  print(f'K-Means CH Index: {kmeans_ch:.4f}')
+
   order_centroids = model.cluster_centers_.argsort()[:, ::-1]
 
   df['KMeans_Cluster_Labels'] = y_pred
@@ -121,7 +129,7 @@ def k_means_clustering(vector, feature_names, df):
 
   return clusters, df
 
-################################################################################################
+###########################################################################################################
 
 def hierarchical_clustering(vector, feature_names, df):
   # Determining the number of clusters
@@ -141,6 +149,12 @@ def hierarchical_clustering(vector, feature_names, df):
   y_pred = model.fit_predict(vector.toarray())
   linkage_matrix = linkage(vector.toarray(), method='ward')
   flat_clusters = fcluster(linkage_matrix, t=20, criterion='maxclust')
+  hierarchical_sil = silhouette_score(vector, y_pred, metric='euclidean')
+  hierarchical_dbi = davies_bouldin_score(vector.toarray(), y_pred)
+  hierarchical_ch = calinski_harabasz_score(vector.toarray(), y_pred)
+  print(f'Hierarchical Silhouette Score: {hierarchical_sil:.4f}')
+  print(f'Hierarchical Davies-Bouldin Index: {hierarchical_dbi:.4f}')
+  print(f'Hierarchical CH Index: {hierarchical_ch:.4f}')
 
   df['Agglo_Cluster_Labels'] = y_pred
 
@@ -153,11 +167,17 @@ def hierarchical_clustering(vector, feature_names, df):
 
   return clusters, df
 
-################################################################################################
+###########################################################################################################
 
 def dbscan_clustering(vector, feature_names, df):
-  model = DBSCAN(eps=0.2, min_samples=10)
+  model = DBSCAN(eps=0.1, min_samples=20)
   y_pred = model.fit_predict(vector.toarray())
+  dbscan_sil = silhouette_score(vector, y_pred, metric='euclidean')
+  dbscan_dbi = davies_bouldin_score(vector.toarray(), y_pred)
+  dbscan_ch = calinski_harabasz_score(vector.toarray(), y_pred)
+  print(f'DBSCAN Silhouette Score: {dbscan_sil:.4f}')
+  print(f'DBSCAN Davies-Bouldin Index: {dbscan_dbi:.4f}')
+  print(f'DBSCAN CH Index: {dbscan_ch:.4f}')
 
   df['DBSCAN_Cluster_Labels'] = y_pred
 
@@ -175,27 +195,30 @@ def dbscan_clustering(vector, feature_names, df):
 
   return clusters, df
 
-################################################################################################
+###########################################################################################################
 
-def topic_modelling(clusters):
+def topic_modelling(clusters, dbscan=None):
   output_topics = []
+  lemmatizer = spacy.load("en_core_web_sm", disable=["parser", "ner"])
   for cluster in clusters:
-    # Create a dictionary with explicit word-to-ID mapping
     dictionary = corpora.Dictionary([cluster])
-
-    # Create a corpus with word IDs
     corpus = [dictionary.doc2bow(token) for token in [cluster]]
+    lda_model = models.LdaModel(corpus, num_topics=3, id2word=dictionary,  random_state=42, passes=10)
 
-    # Create an LDA model
-    lda_model = models.LdaModel(corpus, num_topics=3, id2word=dictionary)
+    if dbscan == 0:
+      topics = lda_model.show_topics(num_topics=1, num_words=15, formatted=True)
+    else:
+      topics = lda_model.show_topics(num_topics=1, num_words=2, formatted=True)
 
-    # Print the topics with words
-    topics = lda_model.show_topics(num_topics=1, num_words=2, formatted=True)
     temp = []
     for topic in topics:
         temp = temp + re.findall(r'"([^"]*)"', topic[1])
-    output_topics.append(temp)
+    # output_topics.append(temp)
+
+    for word in temp:
+      if lemmatizer(word)[0].pos_ == "NOUN":
+        output_topics.append([word])
 
   return output_topics
 
-################################################################################################
+###########################################################################################################
