@@ -22,8 +22,6 @@ class App(customtkinter.CTk):
         self.accessibility_frame = customtkinter.CTkFrame(self, corner_radius=0, height=30)
         self.accessibility_frame.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6 ,7, 8, 9), weight=1)
         self.accessibility_frame.grid(row=0, column=0, columnspan=3, padx=(0, 0), pady=(0, 0), sticky="nsew")
-        self.help_button = customtkinter.CTkButton(self.accessibility_frame, text="Help", border_width=0)
-        self.help_button.grid(row=0, column=0, sticky="nsw")
         self.appearance_menu = customtkinter.CTkOptionMenu(self.accessibility_frame,
                                                         values=["Dark Mode", "Light Mode"], command=self.change_appearance_mode_event)
         self.appearance_menu.grid(row=0, column=9, sticky="nse")
@@ -208,11 +206,6 @@ class App(customtkinter.CTk):
 
     def change_appearance_mode_event(self, new_appearance_mode: str):
         customtkinter.set_appearance_mode(new_appearance_mode.split()[0])
-
-    def change_scaling_event(self, new_scaling: str):
-        new_scaling_float = int(new_scaling.replace("%", "")) / 100
-        customtkinter.set_widget_scaling(new_scaling_float)
-
 
 if __name__ == "__main__":
     app = App()

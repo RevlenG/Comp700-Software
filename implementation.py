@@ -4,17 +4,14 @@ import numpy as np
 import re
 import nltk
 import math
-import matplotlib.pyplot as plt
 import spacy
 from nltk.corpus import stopwords
 from gensim import corpora, models
 from sklearn import metrics
-from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans, AgglomerativeClustering, DBSCAN
-from sklearn.decomposition import PCA
 from sklearn.metrics import davies_bouldin_score, calinski_harabasz_score, silhouette_score
-from scipy.cluster.hierarchy import ward, linkage, fcluster
+from scipy.cluster.hierarchy import linkage, fcluster
 
 nltk.download('stopwords')
 nltk.download('wordnet')
