@@ -36,7 +36,6 @@ def preprocessing(file_path, tweet_col_name, sentiment_col_name, company_index, 
     df = df[df["Sentiment"] != "neutral"]
 
     #Removal of duplicate tweets
-    # sorted_data = df.sort_values('Tweet', axis=0, ascending=True, inplace=False, kind='quicksort', na_position='last')
     df.drop_duplicates(subset={"Tweet", "Sentiment"}, keep='first', inplace=True)
 
     custom_stop_words = ["rt", "link"]
@@ -113,10 +112,13 @@ def k_means_clustering(vector, feature_names, df):
   print(f'K-Means Davies-Bouldin Index: {kmeans_dbi:.4f}')
   print(f'K-Means CH Index: {kmeans_ch:.4f}')
 
+  #Determining the order of the cluster centers within each cluster
   order_centroids = model.cluster_centers_.argsort()[:, ::-1]
 
+  #Adding the K-means Cluster Labels to the dataframe
   df['KMeans_Cluster_Labels'] = y_pred
   
+  #Retrieving the top features that are most representative of each cluster
   clusters = []
   for i in range(num_clusters):
       cluster = []
@@ -153,8 +155,10 @@ def hierarchical_clustering(vector, feature_names, df):
   print(f'Hierarchical Davies-Bouldin Index: {hierarchical_dbi:.4f}')
   print(f'Hierarchical CH Index: {hierarchical_ch:.4f}')
 
+  #Adding the Hierarchical Cluster Labels to the dataframe
   df['Agglo_Cluster_Labels'] = y_pred
 
+  #Retrieving the top features that are most representative of each cluster
   clusters = []
   for i in range(num_clusters):
       cluster = []
@@ -176,11 +180,13 @@ def dbscan_clustering(vector, feature_names, df):
   print(f'DBSCAN Davies-Bouldin Index: {dbscan_dbi:.4f}')
   print(f'DBSCAN CH Index: {dbscan_ch:.4f}')
 
+  #Adding the DBSCAN Cluster Labels to the dataframe
   df['DBSCAN_Cluster_Labels'] = y_pred
 
-  num_clusters = len(set(y_pred)) - (1 if -1 in y_pred else 0)  # Calculate the number of clusters
-  print(num_clusters)
+  # Retrieving the number of clusters
+  num_clusters = len(set(y_pred)) - (1 if -1 in y_pred else 0)  
 
+  #Retrieving the top features that are most representative of each cluster
   clusters = []
   for i in range(num_clusters):
       cluster = []
@@ -199,9 +205,14 @@ def topic_modelling(clusters, dbscan=None):
   lemmatizer = spacy.load("en_core_web_sm", disable=["parser", "ner"])
   for cluster in clusters:
     dictionary = corpora.Dictionary([cluster])
+
+    #Create a bag of words representation of the current cluster using the dictionary
     corpus = [dictionary.doc2bow(token) for token in [cluster]]
+
+    #Train an LDA (Latent Dirichlet Allocation) model on the cluster
     lda_model = models.LdaModel(corpus, num_topics=3, id2word=dictionary,  random_state=42, passes=10)
 
+    #Determine the number of words to include in the topics based on the DBSCAN flag
     if dbscan == 0:
       topics = lda_model.show_topics(num_topics=1, num_words=15, formatted=True)
     else:
@@ -212,6 +223,7 @@ def topic_modelling(clusters, dbscan=None):
         temp = temp + re.findall(r'"([^"]*)"', topic[1])
     # output_topics.append(temp)
 
+    #Check if each of the identified preferences is a noun
     for word in temp:
       if lemmatizer(word)[0].pos_ == "NOUN":
         output_topics.append([word])
