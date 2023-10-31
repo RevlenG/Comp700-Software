@@ -1,7 +1,7 @@
-# 1. CLUSTERING - GUI APPLICATION:
+# CLUSTERING - GUI APPLICATION:
 The is a simple Python application with a minimalistic GUI containing textboxes, radio button groups, labels, large output boxes and a button. This application is used to detect customer preferences in review data, using LDA topic modelling in combination with clustering algorithms such as K-means, Hierarchical and DBSCAN. 
 
-## 1.1. Features
+## Features
 __Textboxes:__ The application provides textboxes for inputting or loading review data, allowing users to customize the dataset to be analyzed.
 
 __Radio Button Groups:__ Users can choose between different clustering algorithms, including K-means, Hierarchical, and DBSCAN.
@@ -12,17 +12,17 @@ __Large Output Boxes:__ Results of the analysis, including customer preferences 
 
 __Start Button:__ Triggers the LDA topic modeling and clustering process.
 
-## 1.2. Prerequisites
+## Prerequisites
 Before using this application, you need to have the following prerequisites:
 - Python 3.10 installed on your system.
-- Necessary Python packages, which can be installed using the provided requirements file.
+- Necessary Python packages, which can be installed using the provided requirements file. 
 
-## 1.3. Installation
+## Installation
 1. Clone the repository to your local machine or download the ZIP file.
 2. Navigate to the project directory.
-3. Install the required dependencies using pip.
+3. Install the required dependencies using pip. (pip install -r requirements.txt)
 
-## 1.4. Usage 
+## Usage 
 1. Open a terminal or command prompt.
 2. Navigate to the project directory where the application is located.
 3. Run the application by executing the following command: "python gui.py"
@@ -33,3 +33,6 @@ Before using this application, you need to have the following prerequisites:
 8. The application will perform LDA topic modeling and clustering based on the selected algorithm.
 9. The results, including customer preferences (likes and dislikes) based on the detected topics and clusters, will be displayed in the output boxes.
 
+Dataset: https://www.kaggle.com/datasets/crowdflower/twitter-airline-sentiment
+
+Github Repo: https://github.com/RevlenG/Comp700-Software
