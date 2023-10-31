@@ -33,4 +33,5 @@ Before using this application, you need to have the following prerequisites:
 8. The application will perform LDA topic modeling and clustering based on the selected algorithm.
 9. The results, including customer preferences (likes and dislikes) based on the detected topics and clusters, will be displayed in the output boxes.
 
-Datase: https://www.kaggle.com/datasets/crowdflower/twitter-airline-sentiment
+Dataset: https://www.kaggle.com/datasets/crowdflower/twitter-airline-sentiment
+Github Repo: https://github.com/RevlenG/Comp700-Software
