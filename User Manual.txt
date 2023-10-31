@@ -1,0 +1,18 @@
+User Manual for the Clustering Application
+-The Features, Prerequisites, Installation and Usage of the Application is outlined within the README.md file.
+
+Required Inputs:
+1. "Enter Dataset Path/Directory: " - This is where you input the location of the dataset.
+
+2. "Enter Column Name for Reviews/Tweets: " - This is where you specify the name of the column containing the review texts.
+
+3. "Enter Column Name for Sentiments: " - This is where you specify the name of the column containing the sentiment of the review texts.
+
+4. "Are all reviews in the dataset for the same company?" - If the dataset contains reviews from various companies, and not just a single company, you should select "No". However, if the dataset exclusively includes reviews from a single company, you would select "Yes".
+
+If you selected "No" for Input 4, you would be required to input for 4.1 and 4.2
+4.1 "Enter Column Name for Companies: " - This is where you provide the name of the column that contains the names of the various companies.
+
+4.2 "Enter the Name of the Company for Review Clustering: " - This is where you specify the name of the specific company for which you want to retrieve the likes and dislikes from the reviews.
+
+5. "Clustering Method: " - This is where you select your preferred clustering algorithm.

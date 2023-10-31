@@ -183,7 +183,7 @@ def dbscan_clustering(vector, feature_names, df):
   #Adding the DBSCAN Cluster Labels to the dataframe
   df['DBSCAN_Cluster_Labels'] = y_pred
 
-  # Retrieving the number of clusters
+  #Retrieving the number of clusters
   num_clusters = len(set(y_pred)) - (1 if -1 in y_pred else 0)  
 
   #Retrieving the top features that are most representative of each cluster
@@ -209,7 +209,7 @@ def topic_modelling(clusters, dbscan=None):
     #Create a bag of words representation of the current cluster using the dictionary
     corpus = [dictionary.doc2bow(token) for token in [cluster]]
 
-    #Train an LDA (Latent Dirichlet Allocation) model on the cluster
+    #Train an LDA model on the cluster
     lda_model = models.LdaModel(corpus, num_topics=3, id2word=dictionary,  random_state=42, passes=10)
 
     #Determine the number of words to include in the topics based on the DBSCAN flag
