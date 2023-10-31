@@ -15,12 +15,12 @@ __Start Button:__ Triggers the LDA topic modeling and clustering process.
 ## Prerequisites
 Before using this application, you need to have the following prerequisites:
 - Python 3.10 installed on your system.
-- Necessary Python packages, which can be installed using the provided requirements file.
+- Necessary Python packages, which can be installed using the provided requirements file. 
 
 ## Installation
 1. Clone the repository to your local machine or download the ZIP file.
 2. Navigate to the project directory.
-3. Install the required dependencies using pip.
+3. Install the required dependencies using pip. (pip install -r requirements.txt)
 
 ## Usage 
 1. Open a terminal or command prompt.
