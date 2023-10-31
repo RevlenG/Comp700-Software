@@ -34,4 +34,5 @@ Before using this application, you need to have the following prerequisites:
 9. The results, including customer preferences (likes and dislikes) based on the detected topics and clusters, will be displayed in the output boxes.
 
 Dataset: https://www.kaggle.com/datasets/crowdflower/twitter-airline-sentiment
+
 Github Repo: https://github.com/RevlenG/Comp700-Software
