@@ -1,6 +1,9 @@
 User Manual for the Clustering Application
 -The Features, Prerequisites, Installation and Usage of the Application is outlined within the README.md file.
 
+Dataset: https://www.kaggle.com/datasets/crowdflower/twitter-airline-sentiment
+Github Repo: https://github.com/RevlenG/Comp700-Software
+
 Required Inputs:
 1. "Enter Dataset Path/Directory: " - This is where you input the location of the dataset.
 
